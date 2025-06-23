@@ -1,0 +1,482 @@
+<!-- templates/recipes/recipe_detail.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ recipe.title }} - Tarif - Diyetisyen{% endblock %}
+
+{% block content %}
+<!-- Recipe Header -->
+<section class="py-5" style="margin-top: 76px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'recipes:recipe_list' %}">Tarifler</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'recipes:recipe_list_by_category' recipe.category.slug %}">{{ recipe.category.name }}</a></li>
+                        <li class="breadcrumb-item active">{{ recipe.title }}</li>
+                    </ol>
+                </nav>
+                
+                <!-- Recipe Title -->
+                <h1 class="display-6 fw-bold mb-3">{{ recipe.title }}</h1>
+                <p class="lead text-muted mb-4">{{ recipe.description }}</p>
+                
+                <!-- Recipe Meta -->
+                <div class="recipe-meta mb-4">
+                    <div class="row">
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="text-center p-3 bg-light rounded">
+                                <i class="fas fa-clock text-primary fa-2x mb-2"></i>
+                                <div>
+                                    <strong>{{ recipe.total_time }}</strong>
+                                    <div class="small text-muted">Dakika</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="text-center p-3 bg-light rounded">
+                                <i class="fas fa-users text-success fa-2x mb-2"></i>
+                                <div>
+                                    <strong>{{ recipe.servings }}</strong>
+                                    <div class="small text-muted">Kişilik</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="text-center p-3 bg-light rounded">
+                                <i class="fas fa-signal text-warning fa-2x mb-2"></i>
+                                <div>
+                                    <strong>{{ recipe.get_difficulty_display }}</strong>
+                                    <div class="small text-muted">Zorluk</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="text-center p-3 bg-light rounded">
+                                <i class="fas fa-fire text-danger fa-2x mb-2"></i>
+                                <div>
+                                    <strong>{{ recipe.calories_per_serving|default:"--" }}</strong>
+                                    <div class="small text-muted">Kalori</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Diet Tags -->
+                <div class="diet-tags mb-4">
+                    {% if recipe.is_vegetarian %}
+                        <span class="badge bg-success me-2">
+                            <i class="fas fa-leaf me-1"></i>Vejetaryen
+                        </span>
+                    {% endif %}
+                    {% if recipe.is_vegan %}
+                        <span class="badge bg-success me-2">
+                            <i class="fas fa-seedling me-1"></i>Vegan
+                        </span>
+                    {% endif %}
+                    {% if recipe.is_gluten_free %}
+                        <span class="badge bg-warning me-2">
+                            <i class="fas fa-ban me-1"></i>Glutensiz
+                        </span>
+                    {% endif %}
+                    {% if recipe.is_low_carb %}
+                        <span class="badge bg-info me-2">Düşük Karbonhidrat</span>
+                    {% endif %}
+                    {% if recipe.is_high_protein %}
+                        <span class="badge bg-danger me-2">Yüksek Protein</span>
+                    {% endif %}
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons mb-5">
+                    <button class="btn btn-outline-primary me-2" id="favorite-btn">
+                        <i class="far fa-heart me-1"></i>Favorilere Ekle
+                    </button>
+                    <button class="btn btn-outline-success me-2" onclick="window.print()">
+                        <i class="fas fa-print me-1"></i>Yazdır
+                    </button>
+                    <div class="btn-group me-2" role="group">
+                        <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-share me-1"></i>Paylaş
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item share-btn" href="#" data-platform="facebook">
+                                <i class="fab fa-facebook me-2"></i>Facebook
+                            </a></li>
+                            <li><a class="dropdown-item share-btn" href="#" data-platform="twitter">
+                                <i class="fab fa-twitter me-2"></i>Twitter
+                            </a></li>
+                            <li><a class="dropdown-item share-btn" href="#" data-platform="whatsapp">
+                                <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recipe Image -->
+            <div class="col-lg-4">
+                <div class="recipe-image-container position-relative">
+                    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="img-fluid rounded-3 shadow-lg">
+                    <div class="image-badge position-absolute top-0 end-0 m-3">
+                        <span class="badge bg-primary fs-6 p-2">{{ recipe.category.name }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recipe Content -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <!-- Ingredients -->
+            <div class="col-lg-4 mb-5">
+                <div class="card border-0 shadow-sm sticky-top">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Malzemeler</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="ingredients-content">
+                            {{ recipe.ingredients|safe }}
+                        </div>
+                        
+                        <!-- Serving Calculator -->
+                        <div class="serving-calculator mt-3 p-3 bg-light rounded">
+                            <label class="form-label small">Kaç Kişilik:</label>
+                            <div class="input-group input-group-sm">
+                                <button class="btn btn-outline-secondary" type="button" id="decrease-serving">-</button>
+                                <input type="number" class="form-control text-center" id="serving-count" value="{{ recipe.servings }}" min="1" max="20">
+                                <button class="btn btn-outline-secondary" type="button" id="increase-serving">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-utensils me-2"></i>Yapılışı</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="instructions-content">
+                            {{ recipe.instructions|safe }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nutrition Info -->
+                {% if recipe.protein or recipe.carbs or recipe.fat %}
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Beslenme Bilgileri (1 Porsiyon)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            {% if recipe.calories_per_serving %}
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="nutrition-item">
+                                    <h4 class="text-danger">{{ recipe.calories_per_serving }}</h4>
+                                    <small class="text-muted">Kalori</small>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if recipe.protein %}
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="nutrition-item">
+                                    <h4 class="text-primary">{{ recipe.protein }}g</h4>
+                                    <small class="text-muted">Protein</small>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if recipe.carbs %}
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="nutrition-item">
+                                    <h4 class="text-warning">{{ recipe.carbs }}g</h4>
+                                    <small class="text-muted">Karbonhidrat</small>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if recipe.fat %}
+                            <div class="col-md-3 col-6 mb-3">
+                                <div class="nutrition-item">
+                                    <h4 class="text-success">{{ recipe.fat }}g</h4>
+                                    <small class="text-muted">Yağ</small>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Tags -->
+                {% if recipe.tag_list %}
+                <div class="recipe-tags mt-4">
+                    <h6>Etiketler:</h6>
+                    {% for tag in recipe.tag_list %}
+                        <span class="badge bg-light text-dark me-1">#{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recipe Gallery -->
+{% if recipe.additional_images.all %}
+<section class="py-5">
+    <div class="container">
+        <h3 class="text-center mb-5">Tarif Galerisi</h3>
+        <div class="row">
+            {% for image in recipe.additional_images.all %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="gallery-item">
+                    <img src="{{ image.image.url }}" alt="{{ image.caption }}" class="img-fluid rounded shadow-sm gallery-img" data-image="{{ image.image.url }}" data-caption="{{ image.caption }}">
+                    {% if image.caption %}
+                        <small class="text-muted d-block mt-2">{{ image.caption }}</small>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Comments Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h3 class="text-center mb-5">Değerlendirmeler ve Yorumlar</h3>
+                
+                <!-- Rating Form -->
+                <div class="card border-0 shadow-sm mb-5">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0"><i class="fas fa-star me-2"></i>Bu Tarifi Değerlendirin</h5>
+                    </div>
+                    <div class="card-body">
+                        {% crispy rating_form %}
+                    </div>
+                </div>
+                
+                <!-- Existing Ratings -->
+                {% if ratings %}
+                    {% for rating in ratings %}
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="mb-0">{{ rating.name }}</h6>
+                                <div class="rating">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= rating.rating %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="far fa-star text-warning"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <p class="text-muted mb-0">{{ rating.comment }}</p>
+                            <small class="text-muted">{{ rating.created_at|date:"d M Y" }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-comment fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Henüz yorum yapılmamış. İlk yorumu siz yapın!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Recipes -->
+{% if related_recipes %}
+<section class="py-5">
+    <div class="container">
+        <h3 class="text-center mb-5">Benzer Tarifler</h3>
+        <div class="row">
+            {% for related_recipe in related_recipes %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <img src="{{ related_recipe.image.url }}" class="card-img-top" alt="{{ related_recipe.title }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ related_recipe.title }}</h6>
+                        <p class="card-text small text-muted">{{ related_recipe.description|truncatewords:10 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">{{ related_recipe.total_time }} dk</small>
+                            <a href="{{ related_recipe.get_absolute_url }}" class="btn btn-primary btn-sm">Gör</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tarif Resmi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="" alt="" class="img-fluid" id="modalImage">
+                <p class="mt-3" id="modalCaption"></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Django data to JavaScript -->
+<div id="recipe-data" style="display: none;" 
+     data-servings="{{ recipe.servings|default:1 }}" 
+     data-title="{{ recipe.title|escapejs }}"></div>
+
+<script>
+// Get recipe data from DOM
+var recipeElement = document.getElementById('recipe-data');
+var recipeData = {
+    servings: parseInt(recipeElement.dataset.servings) || 1,
+    title: recipeElement.dataset.title || 'Tarif'
+};
+
+$(document).ready(function() {
+    // Serving calculator
+    $('#increase-serving').on('click', function() {
+        var current = parseInt($('#serving-count').val());
+        $('#serving-count').val(current + 1);
+        updateIngredients();
+    });
+    
+    $('#decrease-serving').on('click', function() {
+        var current = parseInt($('#serving-count').val());
+        if (current > 1) {
+            $('#serving-count').val(current - 1);
+            updateIngredients();
+        }
+    });
+    
+    $('#serving-count').on('change', function() {
+        updateIngredients();
+    });
+    
+    function updateIngredients() {
+        var newServing = parseInt($('#serving-count').val());
+        var multiplier = newServing / recipeData.servings;
+        console.log('Serving multiplier:', multiplier);
+        // Ingredient calculation logic can be added here
+    }
+    
+    // Favorite functionality
+    $('#favorite-btn').on('click', function() {
+        var btn = $(this);
+        var icon = btn.find('i');
+        
+        if (icon.hasClass('far')) {
+            icon.removeClass('far').addClass('fas text-danger');
+            btn.html('<i class="fas fa-heart text-danger me-1"></i>Favorilerde');
+            if (typeof showToast === 'function') {
+                showToast('Tarif favorilere eklendi!', 'success');
+            }
+        } else {
+            icon.removeClass('fas text-danger').addClass('far');
+            btn.html('<i class="far fa-heart me-1"></i>Favorilere Ekle');
+            if (typeof showToast === 'function') {
+                showToast('Tarif favorilerden çıkarıldı!', 'info');
+            }
+        }
+    });
+    
+    // Gallery image modal
+    $('.gallery-img').on('click', function() {
+        var imageSrc = $(this).data('image');
+        var caption = $(this).data('caption');
+        
+        $('#modalImage').attr('src', imageSrc);
+        $('#modalCaption').text(caption || '');
+        $('#imageModal').modal('show');
+    });
+    
+    // Share functionality
+    $('.share-btn').on('click', function(e) {
+        e.preventDefault();
+        var platform = $(this).data('platform');
+        var url = encodeURIComponent(window.location.href);
+        var title = encodeURIComponent(recipeData.title);
+        var shareUrl = '';
+        
+        switch(platform) {
+            case 'facebook':
+                shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + url;
+                break;
+            case 'twitter':
+                shareUrl = 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title;
+                break;
+            case 'whatsapp':
+                shareUrl = 'https://api.whatsapp.com/send?text=' + title + ' ' + url;
+                break;
+        }
+        
+        if (shareUrl) {
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+    });
+});
+</script>
+
+<style>
+.gallery-img {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.gallery-img:hover {
+    transform: scale(1.05);
+}
+
+.sticky-top {
+    top: 100px;
+}
+
+.nutrition-item h4 {
+    margin-bottom: 5px;
+}
+
+.instructions-content ol li,
+.ingredients-content ul li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+@media print {
+    .navbar, .btn, .card-header, .modal, footer {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+}
+</style>
+{% endblock %}

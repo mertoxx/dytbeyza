@@ -1,0 +1,339 @@
+<!-- templates/appointments/appointment_success.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Randevu Başarılı - Diyetisyen{% endblock %}
+
+{% block content %}
+<!-- Success Section -->
+<section class="py-5" style="margin-top: 76px; min-height: 80vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <!-- Success Animation -->
+                <div class="success-animation mb-4">
+                    <div class="checkmark-circle">
+                        <div class="background"></div>
+                        <div class="checkmark draw"></div>
+                    </div>
+                </div>
+                
+                <h1 class="display-4 fw-bold text-success mb-4">Randevunuz Alındı!</h1>
+                <p class="lead text-muted mb-5">
+                    Randevu talebiniz başarıyla gönderildi. Size en kısa sürede dönüş yapılacaktır.
+                </p>
+                
+                <!-- Next Steps -->
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-list-check me-2"></i>Sonraki Adımlar</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="timeline">
+                                    <div class="timeline-item d-flex mb-4">
+                                        <div class="timeline-marker bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Randevu Talebi Alındı</h6>
+                                            <p class="text-muted small mb-0">Formunuz başarıyla gönderildi ve kayıt altına alındı.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item d-flex mb-4">
+                                        <div class="timeline-marker bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Onay Bekleniyor</h6>
+                                            <p class="text-muted small mb-0">24 saat içinde randevunuz onaylanacak ve size bilgi verilecektir.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item d-flex mb-4">
+                                        <div class="timeline-marker bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">E-posta Bildirimi</h6>
+                                            <p class="text-muted small mb-0">Randevu detaylarınız e-posta ile tarafınıza gönderilecektir.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item d-flex">
+                                        <div class="timeline-marker bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; min-width: 40px;">
+                                            <i class="fas fa-user-md"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1">Randevu Gerçekleşecek</h6>
+                                            <p class="text-muted small mb-0">Belirlenen tarih ve saatte konsültasyonunuz başlayacaktır.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="row mt-5">
+                    <div class="col-lg-6 mb-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body text-center">
+                                <i class="fas fa-phone text-primary fa-2x mb-3"></i>
+                                <h6>Acil Durum</h6>
+                                <p class="text-muted small mb-3">Acil sorularınız için bizi arayabilirsiniz</p>
+                                <a href="tel:+905551234567" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-phone me-1"></i>+90 555 123 45 67
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body text-center">
+                                <i class="fab fa-whatsapp text-success fa-2x mb-3"></i>
+                                <h6>WhatsApp Destek</h6>
+                                <p class="text-muted small mb-3">7/24 WhatsApp desteği</p>
+                                <a href="https://wa.me/905551234567" target="_blank" class="btn btn-outline-success btn-sm">
+                                    <i class="fab fa-whatsapp me-1"></i>Mesaj Gönder
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="d-flex flex-wrap justify-content-center gap-3 mt-5">
+                    <a href="{% url 'main:home' %}" class="btn btn-primary btn-lg px-4">
+                        <i class="fas fa-home me-2"></i>Ana Sayfaya Dön
+                    </a>
+                    <a href="{% url 'success_stories:story_list' %}" class="btn btn-outline-primary btn-lg px-4">
+                        <i class="fas fa-trophy me-2"></i>Başarı Hikayeleri
+                    </a>
+                    <a href="{% url 'recipes:recipe_list' %}" class="btn btn-outline-success btn-lg px-4">
+                        <i class="fas fa-utensils me-2"></i>Sağlıklı Tarifler
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Preparation Tips -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold">Randevuya Nasıl Hazırlanmalı?</h3>
+            <p class="text-muted">İlk konsültasyonunuzdan en iyi verimi almak için</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-book text-primary fa-3x mb-3"></i>
+                        <h6>Beslenme Günlüğü</h6>
+                        <p class="text-muted small">Son 3 günlük yediğiniz yemekleri not alın</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-pills text-success fa-3x mb-3"></i>
+                        <h6>İlaç Listesi</h6>
+                        <p class="text-muted small">Kullandığınız tüm ilaçların listesini hazırlayın</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-heartbeat text-danger fa-3x mb-3"></i>
+                        <h6>Sağlık Raporu</h6>
+                        <p class="text-muted small">Varsa son kan tahlil sonuçlarınızı getirin</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-bullseye text-warning fa-3x mb-3"></i>
+                        <h6>Hedefler</h6>
+                        <p class="text-muted small">Ne tür sonuçlar beklediğinizi düşünün</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold">Randevu Hakkında Merak Edilenler</h3>
+            <p class="text-muted">Sık sorulan sorular</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Randevumu iptal edebilir miyim?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Evet, randevunuzu 24 saat öncesinden iptal edebilirsiniz. Bunun için bizi arayabilir veya WhatsApp üzerinden bilgi verebilirsiniz.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Randevu ücretli mi?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                İlk konsültasyon ücretsizdir. Detaylı fiyat bilgisi için randevu onaylandıktan sonra sizinle paylaşılacaktır.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Geç kalırsam ne olur?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Lütfen randevu saatinize dakik gelmeye özen gösterin. Geç kalma durumunda randevu süreniz kısalabilir veya ertelenebilir.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<style>
+/* Success Animation Styles */
+.success-animation {
+    margin: 2rem 0;
+}
+
+.checkmark-circle {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.checkmark-circle .background {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: #28a745;
+    position: absolute;
+}
+
+.checkmark-circle .checkmark {
+    border-radius: 5px;
+}
+
+.checkmark-circle .checkmark.draw:after {
+    animation-duration: 800ms;
+    animation-timing-function: ease;
+    animation-name: checkmark;
+    transform: scaleX(-1) rotate(135deg);
+}
+
+.checkmark-circle .checkmark:after {
+    opacity: 1;
+    height: 75px;
+    width: 37.5px;
+    transform-origin: left top;
+    border-right: 6px solid #fff;
+    border-top: 6px solid #fff;
+    content: '';
+    left: 35px;
+    top: 80px;
+    position: absolute;
+}
+
+@keyframes checkmark {
+    0% {
+        height: 0;
+        width: 0;
+        opacity: 1;
+    }
+    20% {
+        height: 0;
+        width: 37.5px;
+        opacity: 1;
+    }
+    40% {
+        height: 75px;
+        width: 37.5px;
+        opacity: 1;
+    }
+    100% {
+        height: 75px;
+        width: 37.5px;
+        opacity: 1;
+    }
+}
+
+/* Timeline Styles */
+.timeline-item {
+    position: relative;
+}
+
+.timeline-item:not(:last-child):before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 50px;
+    width: 2px;
+    height: 100%;
+    background: #e9ecef;
+}
+</style>
+
+<script>
+$(document).ready(function() {
+    // Auto-hide success message after 5 seconds
+    setTimeout(function() {
+        $('.alert-success').fadeOut();
+    }, 5000);
+    
+    // Smooth scroll to preparation tips
+    $('.scroll-to-tips').on('click', function(e) {
+        e.preventDefault();
+        $('html, body').animate({
+            scrollTop: $('.preparation-tips').offset().top - 100
+        }, 1000);
+    });
+    
+    // Copy appointment reference
+    $('.copy-reference').on('click', function() {
+        var text = $(this).data('reference');
+        navigator.clipboard.writeText(text).then(function() {
+            showToast('Randevu referans numarası kopyalandı!', 'success');
+        });
+    });
+});
+</script>
+{% endblock %}

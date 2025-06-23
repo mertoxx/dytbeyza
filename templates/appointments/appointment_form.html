@@ -1,0 +1,426 @@
+<!-- templates/appointments/appointment_form.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Randevu Al - Diyetisyen{% endblock %}
+
+{% block extra_head %}
+<link href="{% static 'css/appointment.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-primary text-white py-5" style="margin-top: 76px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold">Randevu Al</h1>
+                <p class="lead">Sağlıklı yaşam yolculuğunuz için ilk adımı atın</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Appointment Form -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- Progress Bar -->
+                <div class="progress mb-4" style="height: 5px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                
+                <!-- Form Errors -->
+                {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Form hatası!</strong> Lütfen aşağıdaki alanları kontrol edin:
+                    <ul class="mb-0 mt-2">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ field }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endif %}
+                
+                <!-- Info Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0 bg-light text-center">
+                            <div class="card-body">
+                                <i class="fas fa-clock text-primary fa-2x mb-2"></i>
+                                <h6>Hızlı Randevu</h6>
+                                <small class="text-muted">Sadece 2 dakika</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0 bg-light text-center">
+                            <div class="card-body">
+                                <i class="fas fa-shield-alt text-success fa-2x mb-2"></i>
+                                <h6>Güvenli</h6>
+                                <small class="text-muted">Bilgileriniz korunur</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0 bg-light text-center">
+                            <div class="card-body">
+                                <i class="fas fa-user-md text-info fa-2x mb-2"></i>
+                                <h6>Profesyonel</h6>
+                                <small class="text-muted">Uzman diyetisyen</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Card -->
+                <div class="card shadow border-0">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-calendar-plus me-2"></i>Randevu Bilgileri
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- FIX: Form action eklendi -->
+                        <form method="post" id="appointment-form" action="{% url 'appointments:appointment_create' %}" novalidate>
+                            {% csrf_token %}
+                            {% crispy form %}
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Help Text -->
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="help-card p-3 bg-light rounded">
+                            <h6><i class="fas fa-info-circle text-primary me-2"></i>Randevu Hakkında</h6>
+                            <ul class="small mb-0">
+                                <li>İlk konsültasyon 60 dakika sürer</li>
+                                <li>Kontrol randevuları 30-45 dakika</li>
+                                <li>Online randevu seçeneği mevcut</li>
+                                <li>24 saat öncesinden iptal edilebilir</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="help-card p-3 bg-light rounded">
+                            <h6><i class="fas fa-phone text-success me-2"></i>Acil Durum</h6>
+                            <p class="small mb-2">Acil sorularınız için:</p>
+                            <a href="https://wa.me/905551234567" target="_blank" class="btn btn-outline-success btn-sm">
+                                <i class="fab fa-whatsapp me-1"></i>WhatsApp
+                            </a>
+                            <a href="tel:+905551234567" class="btn btn-outline-primary btn-sm ms-2">
+                                <i class="fas fa-phone me-1"></i>Ara
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold">Randevunuzda Neler Olacak?</h3>
+            <p class="text-muted">İlk konsültasyonunuzda size neler sunacağımız</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="benefit-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-user-check fa-2x"></i>
+                    </div>
+                    <h5>Detaylı Analiz</h5>
+                    <p class="text-muted">Sağlık durumunuz ve beslenme alışkanlıklarınızın kapsamlı değerlendirmesi</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="benefit-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-clipboard-list fa-2x"></i>
+                    </div>
+                    <h5>Özel Program</h5>
+                    <p class="text-muted">Size özel hazırlanmış, yaşam tarzınıza uygun beslenme programı</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="benefit-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-utensils fa-2x"></i>
+                    </div>
+                    <h5>Tarif Önerileri</h5>
+                    <p class="text-muted">Lezzetli ve sağlıklı yemek tarifleri ile beslenme rehberi</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="benefit-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                    <h5>İlerleme Takibi</h5>
+                    <p class="text-muted">Düzenli kontroller ve gelişiminizin profesyonel takibi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold">Müşterilerimiz Ne Diyor?</h3>
+            <p class="text-muted">Randevu alan müşterilerimizin deneyimleri</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="avatar bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h6>Ayşe K.</h6>
+                        <div class="rating mb-2">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p class="small text-muted">"Randevu alma süreci çok kolaydı. İlk görüşmede kendimi çok rahat hissettim."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="avatar bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h6>Mehmet T.</h6>
+                        <div class="rating mb-2">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p class="small text-muted">"Profesyonel yaklaşım ve detaylı analiz. Kesinlikle tavsiye ederim."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="avatar bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h6>Zeynep A.</h6>
+                        <div class="rating mb-2">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p class="small text-muted">"Online randevu çok pratikti. Evden çıkmadan danışmanlık aldım."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    console.log('Appointment form JavaScript loaded');
+    
+    // Bugünün tarihini minimum olarak ayarla
+    const today = new Date().toISOString().split('T')[0];
+    $('#id_appointment_date').attr('min', today);
+    
+    // Form progress tracker
+    function updateProgress() {
+        const totalFields = $('#appointment-form input[required], #appointment-form select[required], #appointment-form textarea[required]').length;
+        let filledFields = 0;
+        
+        $('#appointment-form input[required], #appointment-form select[required], #appointment-form textarea[required]').each(function() {
+            if ($(this).val() && $(this).val().trim() !== '') {
+                filledFields++;
+            }
+        });
+        
+        const progress = totalFields > 0 ? Math.round((filledFields / totalFields) * 100) : 0;
+        $('.progress-bar').css('width', progress + '%').attr('aria-valuenow', progress);
+        
+        console.log('Progress updated:', progress + '%', filledFields + '/' + totalFields);
+    }
+    
+    // Form alanları değiştiğinde progress'i güncelle
+    $('#appointment-form input, #appointment-form select, #appointment-form textarea').on('input change', function() {
+        updateProgress();
+        
+        // Bootstrap validation classes
+        if ($(this).is('[required]')) {
+            if ($(this).val() && $(this).val().trim() !== '') {
+                $(this).removeClass('is-invalid').addClass('is-valid');
+            } else {
+                $(this).removeClass('is-valid').addClass('is-invalid');
+            }
+        }
+    });
+    
+    // Tarih değiştiğinde müsait saatleri getir
+    $('#id_appointment_date').on('change', function() {
+        const selectedDate = $(this).val();
+        const timeSelect = $('#id_appointment_time');
+        
+        if (selectedDate) {
+            console.log('Date selected:', selectedDate);
+            
+            // Loading state
+            timeSelect.html('<option value="">Yükleniyor...</option>').prop('disabled', true);
+            
+            // AJAX ile müsait saatleri getir
+            $.ajax({
+                url: '/appointments/get-available-times/',  // URL'yi kendi URL pattern'inize göre ayarlayın
+                method: 'GET',
+                data: { date: selectedDate },
+                success: function(response) {
+                    console.log('Available times response:', response);
+                    
+                    timeSelect.html('<option value="">Saat seçin</option>').prop('disabled', false);
+                    
+                    if (response.times && response.times.length > 0) {
+                        $.each(response.times, function(index, time) {
+                            timeSelect.append(`<option value="${time.id}">${time.time}</option>`);
+                        });
+                    } else {
+                        timeSelect.append('<option value="">Bu tarihte müsait saat yok</option>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching available times:', error);
+                    timeSelect.html('<option value="">Hata oluştu</option>').prop('disabled', false);
+                    
+                    // Fallback: Sabit saatler
+                    const defaultTimes = [
+                        {id: 1, time: '09:00'},
+                        {id: 2, time: '10:00'},
+                        {id: 3, time: '11:00'},
+                        {id: 4, time: '14:00'},
+                        {id: 5, time: '15:00'},
+                        {id: 6, time: '16:00'}
+                    ];
+                    
+                    timeSelect.html('<option value="">Saat seçin</option>');
+                    $.each(defaultTimes, function(index, time) {
+                        timeSelect.append(`<option value="${time.id}">${time.time}</option>`);
+                    });
+                }
+            });
+        } else {
+            timeSelect.html('<option value="">Önce tarih seçin</option>').prop('disabled', true);
+        }
+    });
+    
+    // Form submit validation
+    $('#appointment-form').on('submit', function(e) {
+        console.log('Form submit triggered');
+        
+        let isValid = true;
+        let firstInvalidField = null;
+        
+        // Zorunlu alanları kontrol et
+        $(this).find('input[required], select[required], textarea[required]').each(function() {
+            const value = $(this).val();
+            const fieldName = $(this).attr('name');
+            
+            if (!value || value.trim() === '') {
+                console.log('Required field empty:', fieldName);
+                $(this).addClass('is-invalid');
+                isValid = false;
+                
+                if (!firstInvalidField) {
+                    firstInvalidField = $(this);
+                }
+            } else {
+                $(this).removeClass('is-invalid').addClass('is-valid');
+            }
+        });
+        
+        // E-posta formatı kontrolü
+        const emailField = $('#id_email');
+        const emailValue = emailField.val();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (emailValue && !emailRegex.test(emailValue)) {
+            console.log('Invalid email format');
+            emailField.addClass('is-invalid');
+            isValid = false;
+            
+            if (!firstInvalidField) {
+                firstInvalidField = emailField;
+            }
+        }
+        
+        if (!isValid) {
+            e.preventDefault();
+            console.log('Form validation failed');
+            
+            // İlk hatalı alana odaklan
+            if (firstInvalidField) {
+                $('html, body').animate({
+                    scrollTop: firstInvalidField.offset().top - 100
+                }, 500);
+                firstInvalidField.focus();
+            }
+            
+            // Hata mesajı göster
+            if (!$('.alert-danger').length) {
+                const errorAlert = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Form hatası!</strong> Lütfen tüm zorunlu alanları doldurun ve geçerli bilgiler girin.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                $('.progress').after(errorAlert);
+            }
+            
+            return false;
+        }
+        
+        console.log('Form validation passed, submitting...');
+        
+        // Loading state
+        const submitBtn = $(this).find('button[type="submit"]');
+        submitBtn.prop('disabled', true).html(`
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Gönderiliyor...
+        `);
+    });
+    
+    // İlk progress hesaplama
+    updateProgress();
+    
+    // Hover effects
+    $('.benefit-icon, .avatar').hover(function() {
+        $(this).css('transform', 'scale(1.1)');
+    }, function() {
+        $(this).css('transform', 'scale(1)');
+    });
+    
+    console.log('Appointment form initialization complete');
+});
+</script>
+{% endblock %}

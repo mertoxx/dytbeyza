@@ -1,0 +1,191 @@
+<!-- templates/main/service_detail.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ service.title }} - Hizmet - Diyetisyen{% endblock %}
+
+{% block content %}
+<!-- Service Header -->
+<section class="py-5" style="margin-top: 76px;">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Ana Sayfa</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'main:services' %}">Hizmetler</a></li>
+                <li class="breadcrumb-item active">{{ service.title }}</li>
+            </ol>
+        </nav>
+        
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-4">{{ service.title }}</h1>
+                <p class="lead text-muted">{{ service.description }}</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                {% if service.icon %}
+                    <div class="service-icon text-primary mb-3">
+                        <i class="{{ service.icon }} fa-6x"></i>
+                    </div>
+                {% endif %}
+                {% if service.image %}
+                    <img src="{{ service.image.url }}" alt="{{ service.title }}" class="img-fluid rounded-3 shadow">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Content -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-5">
+                        <h3 class="mb-4">Hizmet Detayları</h3>
+                        <div class="service-content">
+                            <p>{{ service.description }}</p>
+                            
+                            <h5 class="mt-4 mb-3">Bu Hizmetten Kimler Faydalanabilir?</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Kilo vermek isteyenler</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Sağlıklı beslenme alışkanlığı kazanmak isteyenler</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Kronik hastalığı olanlar</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Sporcular ve aktif bireyler</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Beslenme düzenini optimize etmek isteyenler</li>
+                            </ul>
+                            
+                            <h5 class="mt-4 mb-3">Süreç Nasıl İşler?</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="process-item">
+                                        <div class="process-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                            <span class="fw-bold">1</span>
+                                        </div>
+                                        <div class="d-inline-block">
+                                            <h6>İlk Görüşme</h6>
+                                            <small class="text-muted">Detaylı sağlık ve beslenme analizi</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="process-item">
+                                        <div class="process-number bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                            <span class="fw-bold">2</span>
+                                        </div>
+                                        <div class="d-inline-block">
+                                            <h6>Program Hazırlama</h6>
+                                            <small class="text-muted">Size özel beslenme programı</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="process-item">
+                                        <div class="process-number bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                            <span class="fw-bold">3</span>
+                                        </div>
+                                        <div class="d-inline-block">
+                                            <h6>Takip Süreci</h6>
+                                            <small class="text-muted">Düzenli kontroller ve destek</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="process-item">
+                                        <div class="process-number bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                            <span class="fw-bold">4</span>
+                                        </div>
+                                        <div class="d-inline-block">
+                                            <h6>Hedef Başarı</h6>
+                                            <small class="text-muted">Kalıcı sonuçlar</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- CTA Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center p-4">
+                        <h5 class="card-title">Bu Hizmeti Almak İstiyor Musunuz?</h5>
+                        <p class="card-text text-muted">Hemen randevu alın ve başlayın!</p>
+                        <a href="{% url 'appointments:appointment_create' %}" class="btn btn-primary btn-lg w-100 mb-3">
+                            <i class="fas fa-calendar-plus me-2"></i>Randevu Al
+                        </a>
+                        <a href="{% url 'main:contact' %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-envelope me-2"></i>Bilgi Al
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0"><i class="fas fa-phone me-2"></i>İletişim</h6>
+                    </div>
+                    <div class="card-body">
+                        {% if site_settings.phone %}
+                            <div class="contact-item mb-3">
+                                <i class="fas fa-phone text-primary me-2"></i>
+                                <a href="tel:{{ site_settings.phone }}" class="text-decoration-none">{{ site_settings.phone }}</a>
+                            </div>
+                        {% endif %}
+                        {% if site_settings.email %}
+                            <div class="contact-item mb-3">
+                                <i class="fas fa-envelope text-primary me-2"></i>
+                                <a href="mailto:{{ site_settings.email }}" class="text-decoration-none">{{ site_settings.email }}</a>
+                            </div>
+                        {% endif %}
+                        {% if site_settings.whatsapp_number %}
+                            <div class="contact-item">
+                                <i class="fab fa-whatsapp text-success me-2"></i>
+                                <a href="https://wa.me/{{ site_settings.whatsapp_number|cut:'+' }}" target="_blank" class="text-decoration-none text-success">WhatsApp</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Success Stories -->
+{% if related_stories %}
+<section class="py-5">
+    <div class="container">
+        <h3 class="text-center mb-5">Bu Hizmeti Alan Müşterilerimizin Başarıları</h3>
+        <div class="row">
+            {% for story in related_stories %}
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="row g-0">
+                        <div class="col-6">
+                            <img src="{{ story.before_image.url }}" class="img-fluid h-100" alt="Öncesi" style="object-fit: cover;">
+                        </div>
+                        <div class="col-6">
+                            <img src="{{ story.after_image.url }}" class="img-fluid h-100" alt="Sonrası" style="object-fit: cover;">
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h6 class="card-title">{{ story.client_name }}</h6>
+                        <div class="mb-2">
+                            <span class="badge bg-success">-{{ story.weight_lost }}kg</span>
+                            <span class="badge bg-info">{{ story.duration_months }} ay</span>
+                        </div>
+                        <p class="card-text small text-muted">{{ story.summary|truncatewords:10 }}</p>
+                        <a href="{{ story.get_absolute_url }}" class="btn btn-primary btn-sm">Hikayeyi Oku</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

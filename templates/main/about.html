@@ -1,0 +1,232 @@
+<!-- templates/main/about.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hakkımda - Diyetisyen{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-primary text-white py-5" style="margin-top: 76px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold">Hakkımda</h1>
+                <p class="lead">Profesyonel beslenme danışmanlığı ile sağlıklı yaşam yolculuğunuz</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                {% if homepage.about_image %}
+                    <img src="{{ homepage.about_image.url }}" alt="Hakkımda" class="img-fluid rounded-3 shadow">
+                {% else %}
+                    <div class="placeholder-image bg-light rounded-3 p-5 text-center">
+                        <i class="fas fa-user-md fa-5x text-primary mb-3"></i>
+                        <p class="text-muted">Profesyonel Diyetisyen</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <h2 class="mb-4">{{ homepage.about_title|default:"Profesyonel Yaklaşım" }}</h2>
+                <div class="about-content">
+                    {{ homepage.about_content|safe|default:"<p>Beslenme ve Diyetetik alanında uzman olarak, her bireyin özgün ihtiyaçlarına uygun beslenme programları hazırlıyorum. Bilimsel veriler ışığında, sürdürülebilir ve sağlıklı yaşam tarzı oluşturmanıza yardımcı oluyorum.</p>" }}
+                </div>
+                
+                <!-- Credentials -->
+                <div class="credentials mt-4">
+                    <h5>Eğitim ve Sertifikalar</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-graduation-cap text-primary me-2"></i>Beslenme ve Diyetetik Lisans</li>
+                        <li><i class="fas fa-certificate text-primary me-2"></i>Klinik Beslenme Sertifikası</li>
+                        <li><i class="fas fa-certificate text-primary me-2"></i>Spor Beslenmesi Uzmanlığı</li>
+                        <li><i class="fas fa-users text-primary me-2"></i>5+ Yıl Deneyim</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold text-primary">{{ stats.happy_clients|default:0 }}+</h3>
+                    <p class="text-muted">Mutlu Müşteri</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold text-success">{{ stats.total_weight_lost|default:0|floatformat:0 }}kg</h3>
+                    <p class="text-muted">Toplam Verilen Kilo</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold text-warning">{{ stats.total_recipes|default:0 }}+</h3>
+                    <p class="text-muted">Sağlıklı Tarif</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold text-info">5+</h3>
+                    <p class="text-muted">Yıl Deneyim</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+{% if services %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Hizmetlerim</h2>
+            <p class="text-muted">Size özel beslenme çözümleri</p>
+        </div>
+        <div class="row">
+            {% for service in services %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-0 service-card">
+                    <div class="card-body text-center">
+                        {% if service.icon %}
+                            <div class="service-icon text-primary mb-3">
+                                <i class="{{ service.icon }} fa-3x"></i>
+                            </div>
+                        {% endif %}
+                        <h5 class="card-title">{{ service.title }}</h5>
+                        <p class="card-text text-muted">{{ service.description }}</p>
+                        <a href="{% url 'main:service_detail' service.id %}" class="btn btn-outline-primary">
+                            Detaylar
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Approach Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Çalışma Yaklaşımım</h2>
+            <p class="text-muted">Her birey farklıdır, bu nedenle her programa özel yaklaşım uygularım</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="approach-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-user-check fa-2x"></i>
+                    </div>
+                    <h5>Kişisel Değerlendirme</h5>
+                    <p class="text-muted">Detaylı sağlık analizi ve yaşam tarzı değerlendirmesi</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="approach-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-clipboard-list fa-2x"></i>
+                    </div>
+                    <h5>Özel Program</h5>
+                    <p class="text-muted">Size özel hazırlanmış beslenme programı</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="approach-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                    <h5>Takip ve Destek</h5>
+                    <p class="text-muted">Düzenli kontroller ve motivasyon desteği</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="approach-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-trophy fa-2x"></i>
+                    </div>
+                    <h5>Hedef Başarı</h5>
+                    <p class="text-muted">Sürdürülebilir sonuçlar ve yaşam tarzı değişimi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Me Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="mb-4">Neden Benimle Çalışmalısınız?</h2>
+                <div class="feature-list">
+                    <div class="feature-item d-flex mb-3">
+                        <div class="feature-icon text-primary me-3">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Kanıta Dayalı Yaklaşım</h5>
+                            <p class="text-muted">Bilimsel araştırmalar ve güncel beslenme bilgileri ışığında program hazırlama</p>
+                        </div>
+                    </div>
+                    <div class="feature-item d-flex mb-3">
+                        <div class="feature-icon text-primary me-3">
+                            <i class="fas fa-heart fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Kişiselleştirilmiş Programlar</h5>
+                            <p class="text-muted">Her bireyin ihtiyaçlarına, tercihlerine ve yaşam tarzına uygun çözümler</p>
+                        </div>
+                    </div>
+                    <div class="feature-item d-flex mb-3">
+                        <div class="feature-icon text-primary me-3">
+                            <i class="fas fa-phone fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>7/24 Destek</h5>
+                            <p class="text-muted">WhatsApp üzerinden sürekli iletişim ve motivasyon desteği</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <img src="{% static 'images/about-feature.jpg' %}" alt="Özellikler" class="img-fluid rounded-3 shadow">
+                    <div class="feature-badge position-absolute top-0 start-0 m-3">
+                        <span class="badge bg-primary fs-6 p-3">
+                            <i class="fas fa-award me-2"></i>Profesyonel Hizmet
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Hedeflerinize Birlikte Ulaşalım</h2>
+        <p class="lead mb-4">Sağlıklı yaşam yolculuğunuzda size rehberlik etmek için buradayım</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{% url 'appointments:appointment_create' %}" class="btn btn-warning btn-lg px-4">
+                <i class="fas fa-calendar-plus me-2"></i>Randevu Al
+            </a>
+            <a href="{% url 'main:contact' %}" class="btn btn-outline-light btn-lg px-4">
+                <i class="fas fa-envelope me-2"></i>İletişime Geç
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,291 @@
+<!-- templates/main/contact.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}İletişim - Diyetisyen{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-primary text-white py-5" style="margin-top: 76px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold">İletişim</h1>
+                <p class="lead">Sorularınız için bize ulaşın, size yardımcı olmaktan mutluluk duyarız</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Contact Info -->
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <h3 class="mb-4">İletişim Bilgileri</h3>
+                
+                {% if site_settings %}
+                    {% if site_settings.phone %}
+                    <div class="contact-item d-flex mb-4">
+                        <div class="contact-icon text-primary me-3">
+                            <i class="fas fa-phone fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Telefon</h5>
+                            <p class="text-muted mb-0">{{ site_settings.phone }}</p>
+                            <a href="tel:{{ site_settings.phone }}" class="btn btn-sm btn-outline-primary mt-2">Ara</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if site_settings.email %}
+                    <div class="contact-item d-flex mb-4">
+                        <div class="contact-icon text-primary me-3">
+                            <i class="fas fa-envelope fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>E-posta</h5>
+                            <p class="text-muted mb-0">{{ site_settings.email }}</p>
+                            <a href="mailto:{{ site_settings.email }}" class="btn btn-sm btn-outline-primary mt-2">Mail Gönder</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if site_settings.address %}
+                    <div class="contact-item d-flex mb-4">
+                        <div class="contact-icon text-primary me-3">
+                            <i class="fas fa-map-marker-alt fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Adres</h5>
+                            <p class="text-muted mb-0">{{ site_settings.address }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if site_settings.whatsapp_number %}
+                    <div class="contact-item d-flex mb-4">
+                        <div class="contact-icon text-success me-3">
+                            <i class="fab fa-whatsapp fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>WhatsApp</h5>
+                            <p class="text-muted mb-0">{{ site_settings.whatsapp_number }}</p>
+                            <a href="https://wa.me/{{ site_settings.whatsapp_number|cut:'+' }}" target="_blank" class="btn btn-sm btn-outline-success mt-2">
+                                <i class="fab fa-whatsapp me-1"></i>Mesaj Gönder
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="contact-item d-flex mb-4">
+                        <div class="contact-icon text-primary me-3">
+                            <i class="fas fa-phone fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Telefon</h5>
+                            <p class="text-muted mb-0">+90 555 123 45 67</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item d-flex mb-4">
+                        <div class="contact-icon text-primary me-3">
+                            <i class="fas fa-envelope fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>E-posta</h5>
+                            <p class="text-muted mb-0">info@diyetisyen.com</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Social Media -->
+                <div class="social-media mt-4">
+                    <h5 class="mb-3">Sosyal Medya</h5>
+                    <div class="d-flex gap-2">
+                        {% if site_settings.facebook_url %}
+                            <a href="{{ site_settings.facebook_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                        {% endif %}
+                        {% if site_settings.instagram_url %}
+                            <a href="{{ site_settings.instagram_url }}" target="_blank" class="btn btn-outline-danger btn-sm">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        {% endif %}
+                        {% if site_settings.linkedin_url %}
+                            <a href="{{ site_settings.linkedin_url }}" target="_blank" class="btn btn-outline-info btn-sm">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="col-lg-8">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Bize Mesaj Gönderin</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        {% crispy form %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Working Hours -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mx-auto text-center">
+                <h3 class="mb-4">Çalışma Saatleri</h3>
+                <div class="working-hours">
+                    <div class="row text-center">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-white shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="text-primary">Hafta İçi</h5>
+                                    <p class="mb-0">Pazartesi - Cuma</p>
+                                    <p class="fw-bold">09:00 - 18:00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-white shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="text-primary">Hafta Sonu</h5>
+                                    <p class="mb-0">Cumartesi</p>
+                                    <p class="fw-bold">09:00 - 14:00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Pazar günleri kapalıyız. Acil durumlar için WhatsApp üzerinden ulaşabilirsiniz.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold">Sık Sorulan Sorular</h3>
+            <p class="text-muted">En çok merak edilen sorular</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                İlk randevuda neler olur?
+                            </button>
+                        </h2>
+                        <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                İlk randevuda detaylı sağlık analizi, beslenme alışkanlıkları değerlendirmesi ve hedeflerinizi belirleriz. Size özel beslenme programı hazırlanır.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                Randevu süreleri ne kadar?
+                            </button>
+                        </h2>
+                        <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                İlk konsültasyon yaklaşık 60 dakika, kontrol randevuları 30-45 dakika sürmektedir.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                Online randevu veriyor musunuz?
+                            </button>
+                        </h2>
+                        <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Evet, uzaktan yaşayan danışanlarım için online konsültasyon hizmeti veriyorum. Video konferans ile gerçekleştirilir.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                                Beslenme programı ne kadar sürede hazırlanır?
+                            </button>
+                        </h2>
+                        <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                İlk randevudan sonra 1-2 gün içinde size özel beslenme programınız hazırlanır ve tarafınıza iletilir.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Hemen Başlayalım!</h2>
+        <p class="lead mb-4">Sağlıklı yaşam yolculuğunuz için ilk adımı atın</p>
+        <a href="{% url 'appointments:appointment_create' %}" class="btn btn-warning btn-lg px-5">
+            <i class="fas fa-calendar-plus me-2"></i>Randevu Al
+        </a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Form validation enhancement
+    $('#id_name').on('blur', function() {
+        if ($(this).val().length < 2) {
+            $(this).addClass('is-invalid');
+            if (!$(this).next('.invalid-feedback').length) {
+                $(this).after('<div class="invalid-feedback">İsim en az 2 karakter olmalıdır.</div>');
+            }
+        } else {
+            $(this).removeClass('is-invalid');
+            $(this).next('.invalid-feedback').remove();
+        }
+    });
+    
+    // Copy contact info to clipboard
+    $('.copy-info').on('click', function() {
+        var text = $(this).data('text');
+        navigator.clipboard.writeText(text).then(function() {
+            showToast('Panoya kopyalandı!', 'success');
+        });
+    });
+    
+    // Smooth scroll to form on mobile
+    $('.scroll-to-form').on('click', function(e) {
+        e.preventDefault();
+        $('html, body').animate({
+            scrollTop: $('#contact-form').offset().top - 100
+        }, 1000);
+    });
+});
+</script>
+{% endblock %}

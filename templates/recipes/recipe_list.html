@@ -1,0 +1,471 @@
+<!-- templates/recipes/recipe_list.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if category %}{{ category.name }} Tarifleri{% else %}Yemek Tarifleri{% endif %} - Diyetisyen
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-primary text-white py-5" style="margin-top: 76px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold">
+                    {% if category %}{{ category.name }} Tarifleri{% else %}Sağlıklı Tarifler{% endif %}
+                </h1>
+                <p class="lead">Lezzetli ve besleyici tariflerle sağlıklı beslenme alışkanlığı kazanın</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filters Section -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtrele ve Ara</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" id="filter-form">
+                    <div class="row align-items-end">
+                        <!-- Categories -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                            <label class="form-label small">Kategori</label>
+                            <select name="category" class="form-control form-control-sm">
+                                <option value="">Tüm Kategoriler</option>
+                                {% for cat in categories %}
+                                    <option value="{{ cat.slug }}" {% if category and category.slug == cat.slug %}selected{% endif %}>
+                                        {{ cat.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <!-- Meal Type -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                            <label class="form-label small">Öğün</label>
+                            <select name="meal_type" class="form-control form-control-sm">
+                                <option value="">Tüm Öğünler</option>
+                                <option value="breakfast" {% if meal_type == 'breakfast' %}selected{% endif %}>Kahvaltı</option>
+                                <option value="lunch" {% if meal_type == 'lunch' %}selected{% endif %}>Öğle</option>
+                                <option value="dinner" {% if meal_type == 'dinner' %}selected{% endif %}>Akşam</option>
+                                <option value="snack" {% if meal_type == 'snack' %}selected{% endif %}>Atıştırmalık</option>
+                                <option value="dessert" {% if meal_type == 'dessert' %}selected{% endif %}>Tatlı</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Difficulty -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                            <label class="form-label small">Zorluk</label>
+                            <select name="difficulty" class="form-control form-control-sm">
+                                <option value="">Tüm Seviyeler</option>
+                                <option value="easy" {% if difficulty == 'easy' %}selected{% endif %}>Kolay</option>
+                                <option value="medium" {% if difficulty == 'medium' %}selected{% endif %}>Orta</option>
+                                <option value="hard" {% if difficulty == 'hard' %}selected{% endif %}>Zor</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Dietary Preferences -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                            <label class="form-label small">Beslenme</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dietary" value="vegetarian" id="vegetarian" 
+                                       {% if 'vegetarian' in dietary_filters %}checked{% endif %}>
+                                <label class="form-check-label small" for="vegetarian">Vejetaryen</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dietary" value="vegan" id="vegan"
+                                       {% if 'vegan' in dietary_filters %}checked{% endif %}>
+                                <label class="form-check-label small" for="vegan">Vegan</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Sort -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                            <label class="form-label small">Sırala</label>
+                            <select name="sort" class="form-control form-control-sm">
+                                <option value="-created_at" {% if sort_by == '-created_at' %}selected{% endif %}>En Yeni</option>
+                                <option value="popular" {% if sort_by == 'popular' %}selected{% endif %}>En Popüler</option>
+                                <option value="title" {% if sort_by == 'title' %}selected{% endif %}>A-Z</option>
+                                <option value="-title" {% if sort_by == '-title' %}selected{% endif %}>Z-A</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Search Button -->
+                        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                <i class="fas fa-search me-1"></i>Filtrele
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recipes Grid -->
+<section class="py-5">
+    <div class="container">
+        {% if page_obj %}
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <p class="text-muted mb-0">{{ page_obj.paginator.count }} tarif bulundu</p>
+                <div class="view-toggles">
+                    <button class="btn btn-outline-primary btn-sm active" data-view="grid">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Grid View -->
+            <div id="grid-view" class="row">
+                {% for recipe in page_obj %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card recipe-card h-100 shadow-sm border-0">
+                        <div class="recipe-image-container">
+                            <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}" style="height: 250px; object-fit: cover;">
+                            <div class="recipe-overlay">
+                                <div class="recipe-meta">
+                                    <span class="badge bg-primary me-1">
+                                        <i class="fas fa-clock me-1"></i>{{ recipe.total_time }} dk
+                                    </span>
+                                    <span class="badge bg-success me-1">
+                                        <i class="fas fa-users me-1"></i>{{ recipe.servings }} kişi
+                                    </span>
+                                    {% if recipe.difficulty %}
+                                        <span class="badge bg-warning">
+                                            {{ recipe.get_difficulty_display }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                                <div class="recipe-actions">
+                                    <button class="btn btn-light btn-sm" data-bs-toggle="tooltip" title="Favorilere Ekle">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-light text-dark small">{{ recipe.category.name }}</span>
+                                {% if recipe.calories_per_serving %}
+                                    <small class="text-muted">{{ recipe.calories_per_serving }} kcal</small>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title">
+                                <a href="{{ recipe.get_absolute_url }}" class="text-decoration-none text-dark">
+                                    {{ recipe.title }}
+                                </a>
+                            </h5>
+                            <p class="card-text text-muted small">{{ recipe.description|truncatewords:20 }}</p>
+                            
+                            <!-- Tags -->
+                            {% if recipe.tag_list %}
+                                <div class="recipe-tags mb-2">
+                                    {% for tag in recipe.tag_list|slice:":3" %}
+                                        <span class="badge bg-light text-muted small me-1">#{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Special Diet Icons -->
+                            <div class="diet-icons mb-3">
+                                {% if recipe.is_vegetarian %}
+                                    <span class="badge bg-success" data-bs-toggle="tooltip" title="Vejetaryen">
+                                        <i class="fas fa-leaf"></i>
+                                    </span>
+                                {% endif %}
+                                {% if recipe.is_vegan %}
+                                    <span class="badge bg-success" data-bs-toggle="tooltip" title="Vegan">
+                                        <i class="fas fa-seedling"></i>
+                                    </span>
+                                {% endif %}
+                                {% if recipe.is_gluten_free %}
+                                    <span class="badge bg-warning" data-bs-toggle="tooltip" title="Glutensiz">
+                                        <i class="fas fa-ban"></i>
+                                    </span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-eye me-1"></i>{{ recipe.views }} görüntülenme
+                                </small>
+                                <a href="{{ recipe.get_absolute_url }}" class="btn btn-primary btn-sm">
+                                    Tarifi Gör <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- List View (Hidden by default) -->
+            <div id="list-view" class="d-none">
+                {% for recipe in page_obj %}
+                <div class="card mb-3 shadow-sm border-0">
+                    <div class="row g-0">
+                        <div class="col-md-3">
+                            <img src="{{ recipe.image.url }}" class="img-fluid rounded-start h-100" alt="{{ recipe.title }}" style="object-fit: cover;">
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-light text-dark">{{ recipe.category.name }}</span>
+                                    <small class="text-muted">{{ recipe.created_at|date:"d M Y" }}</small>
+                                </div>
+                                <h5 class="card-title">
+                                    <a href="{{ recipe.get_absolute_url }}" class="text-decoration-none">{{ recipe.title }}</a>
+                                </h5>
+                                <p class="card-text">{{ recipe.description|truncatewords:30 }}</p>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock me-1"></i>{{ recipe.total_time }} dk
+                                            <i class="fas fa-users ms-3 me-1"></i>{{ recipe.servings }} kişi
+                                            {% if recipe.calories_per_serving %}
+                                                <i class="fas fa-fire ms-3 me-1"></i>{{ recipe.calories_per_serving }} kcal
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <a href="{{ recipe.get_absolute_url }}" class="btn btn-primary btn-sm">Tarifi Gör</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+                <nav aria-label="Tarif sayfaları">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.meal_type %}&meal_type={{ request.GET.meal_type }}{% endif %}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.meal_type %}&meal_type={{ request.GET.meal_type }}{% endif %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.meal_type %}&meal_type={{ request.GET.meal_type }}{% endif %}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <!-- No Results -->
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-5x text-muted mb-4"></i>
+                <h3>Tarif Bulunamadı</h3>
+                <p class="text-muted">Aradığınız kriterlere uygun tarif bulunamadı. Filtreleri değiştirerek tekrar deneyebilirsiniz.</p>
+                <a href="{% url 'recipes:recipe_list' %}" class="btn btn-primary">
+                    Tüm Tarifleri Gör
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Popular Categories Section - Düzeltilmiş -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold">Popüler Kategoriler</h3>
+            <p class="text-muted">En çok tercih edilen tarif kategorileri</p>
+        </div>
+        <div class="row">
+            {% for category in categories %}
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                    <a href="{% url 'recipes:recipe_list_by_category' category.slug %}" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm text-center category-card" data-color="{{ category.color }}">
+                            <div class="card-body">
+                                <h6 class="card-title mb-0">{{ category.name }}</h6>
+                                <small class="text-muted">{{ category.recipe_set.count }} tarif</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+
+$(document).ready(function() {
+    // Kategori kartlarına dinamik renk atama
+    $('.category-card').each(function() {
+        var color = $(this).data('color') || '#007bff';
+        $(this).css('border-left-color', color);
+    });
+});
+$(document).ready(function() {
+    // View toggle functionality
+    $('.view-toggles button').on('click', function() {
+        var view = $(this).data('view');
+        $('.view-toggles button').removeClass('active');
+        $(this).addClass('active');
+        
+        if (view === 'grid') {
+            $('#grid-view').removeClass('d-none');
+            $('#list-view').addClass('d-none');
+        } else {
+            $('#grid-view').addClass('d-none');
+            $('#list-view').removeClass('d-none');
+        }
+    });
+    
+    // Auto-submit filter form on change
+    $('#filter-form select, #filter-form input[type="checkbox"]').on('change', function() {
+        $('#filter-form').submit();
+    });
+    
+    // Recipe card hover effects
+    $('.recipe-card').hover(
+        function() {
+            $(this).find('.recipe-overlay').fadeIn(200);
+        },
+        function() {
+            $(this).find('.recipe-overlay').fadeOut(200);
+        }
+    );
+    
+    // Favorite functionality (placeholder)
+    $('.recipe-actions .btn').on('click', function(e) {
+        e.preventDefault();
+        var icon = $(this).find('i');
+        if (icon.hasClass('far')) {
+            icon.removeClass('far').addClass('fas text-danger');
+            if (typeof showToast === 'function') {
+                showToast('Tarif favorilere eklendi!', 'success');
+            }
+        } else {
+            icon.removeClass('fas text-danger').addClass('far');
+            if (typeof showToast === 'function') {
+                showToast('Tarif favorilerden çıkarıldı!', 'info');
+            }
+        }
+    });
+    
+    // Category card hover effect
+    $('.category-card').hover(
+        function() {
+            $(this).addClass('shadow-lg');
+        },
+        function() {
+            $(this).removeClass('shadow-lg');
+        }
+    );
+    
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+
+<style>
+.category-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-left: 4px solid #007bff !important; /* Default color */
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+.recipe-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    padding: 15px;
+}
+
+.recipe-meta {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.recipe-actions {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.category-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.recipe-card {
+    transition: transform 0.3s ease;
+}
+
+.recipe-card:hover {
+    transform: translateY(-5px);
+}
+
+.recipe-image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.diet-icons .badge {
+    margin-right: 5px;
+}
+
+.view-toggles .btn {
+    border-radius: 0;
+}
+
+.view-toggles .btn:first-child {
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+}
+
+.view-toggles .btn:last-child {
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,585 @@
+<!-- templates/success_stories/story_detail.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ story.title }} - {{ story.client_name }} - Başarı Hikayesi{% endblock %}
+
+{% block content %}
+<!-- Story Header -->
+<section class="py-5" style="margin-top: 76px;">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Ana Sayfa</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'success_stories:story_list' %}">Başarı Hikayeleri</a></li>
+                <li class="breadcrumb-item active">{{ story.client_name }}</li>
+            </ol>
+        </nav>
+        
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">{{ story.title }}</h1>
+                <p class="lead text-muted mb-4">{{ story.summary }}</p>
+                
+                <!-- Story Meta -->
+                <div class="story-meta">
+                    <span class="badge bg-primary me-2">{{ story.get_gender_display }}</span>
+                    <span class="badge bg-info me-2">{{ story.age_range }} yaş</span>
+                    {% if story.occupation %}
+                        <span class="badge bg-success me-2">{{ story.occupation }}</span>
+                    {% endif %}
+                    <span class="badge bg-warning">{{ story.success_date|date:"M Y" }}</span>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 text-center">
+                {% if story.profile_image %}
+                    <img src="{{ story.profile_image.url }}" alt="{{ story.client_name }}" class="img-fluid rounded-circle shadow-lg" style="width: 200px; height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="profile-placeholder bg-light rounded-circle d-inline-flex align-items-center justify-content-center shadow-lg" style="width: 200px; height: 200px;">
+                        <i class="fas fa-user fa-5x text-muted"></i>
+                    </div>
+                {% endif %}
+                <h4 class="mt-3">{{ story.client_name }}</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Before/After Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Dönüşüm</h2>
+            <p class="text-muted">{{ story.duration_months }} ayda gerçekleşen inanılmaz değişim</p>
+        </div>
+        
+        <div class="row">
+            <!-- Before Image -->
+            <div class="col-lg-5 mb-4">
+                <div class="comparison-card">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-header bg-danger text-white text-center">
+                            <h5 class="mb-0"><i class="fas fa-calendar-minus me-2"></i>Öncesi</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <img src="{{ story.before_image.url }}" alt="Öncesi" class="img-fluid w-100" style="height: 400px; object-fit: cover;">
+                        </div>
+                        <div class="card-footer text-center bg-white">
+                            <h4 class="text-danger mb-0">{{ story.initial_weight }} kg</h4>
+                            <small class="text-muted">Başlangıç Kilosu</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Transformation Stats -->
+            <div class="col-lg-2 d-flex align-items-center justify-content-center">
+                <div class="transformation-stats text-center">
+                    <div class="stat-circle bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 120px;">
+                        <div>
+                            <h3 class="mb-0">-{{ story.weight_lost }}</h3>
+                            <small>KG</small>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h5 class="text-success">{{ story.weight_loss_percentage }}%</h5>
+                        <small class="text-muted">Kilo Kaybı Oranı</small>
+                    </div>
+                    <div class="mb-3">
+                        <h5 class="text-info">{{ story.duration_months }}</h5>
+                        <small class="text-muted">Ay</small>
+                    </div>
+                    <div>
+                        <h5 class="text-warning">{{ story.monthly_average_loss }}</h5>
+                        <small class="text-muted">Aylık Ort. (kg)</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- After Image -->
+            <div class="col-lg-5 mb-4">
+                <div class="comparison-card">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-header bg-success text-white text-center">
+                            <h5 class="mb-0"><i class="fas fa-calendar-check me-2"></i>Sonrası</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <img src="{{ story.after_image.url }}" alt="Sonrası" class="img-fluid w-100" style="height: 400px; object-fit: cover;">
+                        </div>
+                        <div class="card-footer text-center bg-white">
+                            <h4 class="text-success mb-0">{{ story.final_weight }} kg</h4>
+                            <small class="text-muted">Hedef Kilosu</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Story Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Story -->
+                <div class="card border-0 shadow-sm mb-5">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-book-open me-2"></i>{{ story.client_name }}'in Hikayesi</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="story-content">
+                            {{ story.story_content|safe }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Goals & Challenges -->
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-warning text-white">
+                                <h5 class="mb-0"><i class="fas fa-bullseye me-2"></i>Başlangıç Hedefleri</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">{{ story.initial_goals }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% if story.challenges_faced %}
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-danger text-white">
+                                <h5 class="mb-0"><i class="fas fa-mountain me-2"></i>Karşılaştığı Zorluklar</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">{{ story.challenges_faced }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Key Changes -->
+                <div class="card border-0 shadow-sm mb-5">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-exchange-alt me-2"></i>Yapılan Ana Değişiklikler</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">{{ story.key_changes }}</p>
+                    </div>
+                </div>
+                
+                <!-- Client Testimonial -->
+                <div class="card border-0 shadow-sm mb-5">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-quote-left me-2"></i>{{ story.client_name }}'den Mesaj</h5>
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p class="mb-3">{{ story.client_testimonial }}</p>
+                            <footer class="blockquote-footer">
+                                <cite title="Source Title">{{ story.client_name }}</cite>
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+                
+                <!-- Additional Benefits -->
+                {% if story.health_improvements or story.lifestyle_changes %}
+                <div class="row mb-5">
+                    {% if story.health_improvements %}
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="fas fa-heartbeat me-2"></i>Sağlık İyileştirmeleri</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">{{ story.health_improvements }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if story.lifestyle_changes %}
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0"><i class="fas fa-life-ring me-2"></i>Yaşam Tarzı Değişiklikleri</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">{{ story.lifestyle_changes }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <!-- Comments Section -->
+                {% if story.allow_comments %}
+                <div class="comments-section">
+                    <h4 class="mb-4">Yorumlar</h4>
+                    
+                    <!-- Comment Form -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-comment me-2"></i>Yorum Bırakın</h5>
+                        </div>
+                        <div class="card-body">
+                            {% crispy comment_form %}
+                        </div>
+                    </div>
+                    
+                    <!-- Existing Comments -->
+                    {% if comments %}
+                        {% for comment in comments %}
+                        <div class="card border-0 shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">{{ comment.name }}</h6>
+                                    <small class="text-muted">{{ comment.created_at|date:"d M Y" }}</small>
+                                </div>
+                                <p class="mb-0">{{ comment.comment }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-comment fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Henüz yorum yapılmamış. İlk yorumu siz yapın!</p>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Body Measurements Comparison -->
+                {% if story.comparison %}
+                <div class="card border-0 shadow-sm mb-4 sticky-top" style="top: 100px;">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0"><i class="fas fa-ruler me-2"></i>Vücut Ölçüleri</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if story.comparison.before_chest and story.comparison.after_chest %}
+                        <div class="measurement-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span><i class="fas fa-expand-arrows-alt me-2"></i>Göğüs</span>
+                                <span class="text-success fw-bold">-{{ story.comparison.chest_difference }} cm</span>
+                            </div>
+                            <small class="text-muted">{{ story.comparison.before_chest }} cm → {{ story.comparison.after_chest }} cm</small>
+                        </div>
+                        {% endif %}
+                        
+                        {% if story.comparison.before_waist and story.comparison.after_waist %}
+                        <div class="measurement-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span><i class="fas fa-expand-arrows-alt me-2"></i>Bel</span>
+                                <span class="text-success fw-bold">-{{ story.comparison.waist_difference }} cm</span>
+                            </div>
+                            <small class="text-muted">{{ story.comparison.before_waist }} cm → {{ story.comparison.after_waist }} cm</small>
+                        </div>
+                        {% endif %}
+                        
+                        {% if story.comparison.before_hip and story.comparison.after_hip %}
+                        <div class="measurement-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span><i class="fas fa-expand-arrows-alt me-2"></i>Kalça</span>
+                                <span class="text-success fw-bold">-{{ story.comparison.hip_difference }} cm</span>
+                            </div>
+                            <small class="text-muted">{{ story.comparison.before_hip }} cm → {{ story.comparison.after_hip }} cm</small>
+                        </div>
+                        {% endif %}
+                        
+                        {% if story.comparison.before_bmi and story.comparison.after_bmi %}
+                        <div class="measurement-item">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span><i class="fas fa-weight me-2"></i>BMI</span>
+                                <span class="text-success fw-bold">-{{ story.comparison.bmi_difference|floatformat:1 }}</span>
+                            </div>
+                            <small class="text-muted">{{ story.comparison.before_bmi }} → {{ story.comparison.after_bmi }}</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Share Buttons -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-share me-2"></i>Paylaş</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary share-btn" data-platform="facebook">
+                                <i class="fab fa-facebook me-2"></i>Facebook'ta Paylaş
+                            </button>
+                            <button class="btn btn-info share-btn" data-platform="twitter">
+                                <i class="fab fa-twitter me-2"></i>Twitter'da Paylaş
+                            </button>
+                            <button class="btn btn-success share-btn" data-platform="whatsapp">
+                                <i class="fab fa-whatsapp me-2"></i>WhatsApp'ta Paylaş
+                            </button>
+                            <button class="btn btn-outline-secondary" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>Yazdır
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-timeline me-2"></i>Süreç</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline">
+                            <div class="timeline-item d-flex mb-3">
+                                <div class="timeline-marker bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; min-width: 30px;">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Başlangıç</h6>
+                                    <small class="text-muted">{{ story.initial_weight }} kg</small>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item d-flex mb-3">
+                                <div class="timeline-marker bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; min-width: 30px;">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Süreç</h6>
+                                    <small class="text-muted">{{ story.duration_months }} ay çalışma</small>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item d-flex">
+                                <div class="timeline-marker bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center me-3" style="width: 30px; height: 30px; min-width: 30px;">
+                                    <i class="fas fa-flag-checkered"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Sonuç</h6>
+                                    <small class="text-muted">{{ story.final_weight }} kg (-{{ story.weight_lost }}kg)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CTA -->
+                <div class="card border-0 shadow-sm bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h5 class="mb-3">Siz de Başarabilirsiniz!</h5>
+                        <p class="mb-3">{{ story.client_name }} gibi sizin de dönüşümünüzü başlatmaya hazır mısınız?</p>
+                        <a href="{% url 'appointments:appointment_create' %}" class="btn btn-warning btn-lg w-100">
+                            <i class="fas fa-calendar-plus me-2"></i>Randevu Al
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Stories -->
+{% if related_stories %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h3 class="text-center mb-5">Benzer Başarı Hikayeleri</h3>
+        <div class="row">
+            {% for related_story in related_stories %}
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="row g-0">
+                        <div class="col-6">
+                            <img src="{{ related_story.before_image.url }}" class="img-fluid h-100" alt="Öncesi" style="object-fit: cover;">
+                        </div>
+                        <div class="col-6">
+                            <img src="{{ related_story.after_image.url }}" class="img-fluid h-100" alt="Sonrası" style="object-fit: cover;">
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h6 class="card-title">{{ related_story.client_name }}</h6>
+                        <div class="mb-2">
+                            <span class="badge bg-success">-{{ related_story.weight_lost }}kg</span>
+                            <span class="badge bg-info">{{ related_story.duration_months }} ay</span>
+                        </div>
+                        <p class="card-text small text-muted">{{ related_story.summary|truncatewords:10 }}</p>
+                        <a href="{{ related_story.get_absolute_url }}" class="btn btn-primary btn-sm">Hikayeyi Oku</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Story data for JavaScript
+var storyData = {
+    clientName: "{{ story.client_name|escapejs }}",
+    title: "{{ story.title|escapejs }}"
+};
+
+$(document).ready(function() {
+    // Share functionality
+    $('.share-btn').on('click', function(e) {
+        e.preventDefault();
+        var platform = $(this).data('platform');
+        var url = encodeURIComponent(window.location.href);
+        var title = encodeURIComponent(storyData.title + ' - ' + storyData.clientName);
+        var shareUrl = '';
+        
+        switch(platform) {
+            case 'facebook':
+                shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + url;
+                break;
+            case 'twitter':
+                shareUrl = 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title;
+                break;
+            case 'whatsapp':
+                shareUrl = 'https://api.whatsapp.com/send?text=' + title + ' ' + url;
+                break;
+        }
+        
+        if (shareUrl) {
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+    });
+    
+    // Scroll animations
+    $(window).on('scroll', function() {
+        $('.comparison-card').each(function() {
+            var elementTop = $(this).offset().top;
+            var viewportTop = $(window).scrollTop();
+            var viewportBottom = viewportTop + $(window).height();
+            
+            if (elementTop < viewportBottom && elementTop > viewportTop) {
+                $(this).addClass('animate__animated animate__fadeInUp');
+            }
+        });
+    });
+    
+    // Timeline animation
+    $('.timeline-item').each(function(index) {
+        $(this).delay(index * 200).fadeIn();
+    });
+    
+    // Image zoom on click
+    $('.comparison-card img').on('click', function() {
+        var src = $(this).attr('src');
+        var modal = $(
+            '<div class="modal fade" tabindex="-1">' +
+                '<div class="modal-dialog modal-lg modal-dialog-centered">' +
+                    '<div class="modal-content">' +
+                        '<div class="modal-body p-0">' +
+                            '<img src="' + src + '" class="img-fluid w-100">' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>'
+        );
+        
+        $('body').append(modal);
+        modal.modal('show');
+        
+        modal.on('hidden.bs.modal', function() {
+            modal.remove();
+        });
+    });
+    
+    // Sticky sidebar adjustment
+    function adjustStickyTop() {
+        var navHeight = $('.navbar').outerHeight();
+        $('.sticky-top').css('top', (navHeight + 20) + 'px');
+    }
+    
+    adjustStickyTop();
+    $(window).on('resize', adjustStickyTop);
+});
+</script>
+
+<style>
+.comparison-card {
+    transition: transform 0.3s ease;
+}
+
+.comparison-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-circle {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.timeline-item:not(:last-child):before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 40px;
+    width: 2px;
+    height: 100%;
+    background: #e9ecef;
+}
+
+.timeline {
+    position: relative;
+}
+
+.story-content {
+    line-height: 1.8;
+}
+
+.story-content p {
+    margin-bottom: 1.5rem;
+}
+
+@media print {
+    .navbar, .btn, .card-header, .sticky-top, .share-btn {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .comparison-card .card {
+        break-inside: avoid;
+    }
+}
+
+@media (max-width: 768px) {
+    .transformation-stats {
+        margin: 2rem 0;
+    }
+    
+    .stat-circle {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    
+    .comparison-card img {
+        height: 300px !important;
+    }
+}
+
+.measurement-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.measurement-item:last-child {
+    border-bottom: none;
+}
+</style>
+{% endblock %}

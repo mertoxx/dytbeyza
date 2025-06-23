@@ -1,0 +1,146 @@
+<!-- templates/main/services.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hizmetler - Diyetisyen{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-primary text-white py-5" style="margin-top: 76px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-5 fw-bold">Hizmetlerim</h1>
+                <p class="lead">Size özel beslenme çözümleri ve danışmanlık hizmetleri</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Grid -->
+<section class="py-5">
+    <div class="container">
+        {% if services %}
+            <div class="row">
+                {% for service in services %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm border-0 service-card">
+                        {% if service.image %}
+                            <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.title }}" style="height: 250px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body text-center d-flex flex-column">
+                            {% if service.icon %}
+                                <div class="service-icon text-primary mb-3">
+                                    <i class="{{ service.icon }} fa-4x"></i>
+                                </div>
+                            {% endif %}
+                            <h4 class="card-title">{{ service.title }}</h4>
+                            <p class="card-text text-muted flex-grow-1">{{ service.description }}</p>
+                            <a href="{% url 'main:service_detail' service.id %}" class="btn btn-primary mt-auto">
+                                Detaylı Bilgi <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-user-md fa-5x text-muted mb-4"></i>
+                <h3>Henüz Hizmet Eklenmemiş</h3>
+                <p class="text-muted">Yakında hizmetlerimizi burada görebileceksiniz.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Neden Beni Seçmelisiniz?</h2>
+            <p class="text-muted">Profesyonel yaklaşım ve kanıta dayalı çözümler</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-user-graduate fa-2x"></i>
+                    </div>
+                    <h5>Uzman Diyetisyen</h5>
+                    <p class="text-muted">Beslenme ve Diyetetik alanında lisans ve sertifikalar</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                    <h5>Kanıta Dayalı</h5>
+                    <p class="text-muted">Bilimsel araştırmalar ve güncel beslenme bilgileri</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-heart fa-2x"></i>
+                    </div>
+                    <h5>Kişiselleştirilmiş</h5>
+                    <p class="text-muted">Her bireyin ihtiyaçlarına özel çözümler</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-phone fa-2x"></i>
+                    </div>
+                    <h5>7/24 Destek</h5>
+                    <p class="text-muted">WhatsApp üzerinden sürekli iletişim ve destek</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Hangi Hizmeti Almak İstiyorsunuz?</h2>
+        <p class="lead mb-4">Size en uygun hizmeti belirlemek için ücretsiz konsültasyon alabilirsiniz</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{% url 'appointments:appointment_create' %}" class="btn btn-warning btn-lg px-4">
+                <i class="fas fa-calendar-plus me-2"></i>Randevu Al
+            </a>
+            <a href="{% url 'main:contact' %}" class="btn btn-outline-light btn-lg px-4">
+                <i class="fas fa-envelope me-2"></i>Bilgi Al
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Service card hover effects
+    $('.service-card').hover(
+        function() {
+            $(this).find('.service-icon').addClass('animate__animated animate__pulse');
+        },
+        function() {
+            $(this).find('.service-icon').removeClass('animate__animated animate__pulse');
+        }
+    );
+    
+    // Feature icon hover effects
+    $('.feature-icon').hover(
+        function() {
+            $(this).addClass('shadow-lg');
+        },
+        function() {
+            $(this).removeClass('shadow-lg');
+        }
+    );
+});
+</script>
+{% endblock %}
