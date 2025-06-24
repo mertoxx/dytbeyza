@@ -9,7 +9,7 @@ SECRET_KEY = 'your-secret-key-here'  # Production'da environment variable kullan
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.vercel.app', '.now.sh']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.vercel.app', '.now.sh','www.dytbeyza.com','www.dytbeyza.com.tr']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
